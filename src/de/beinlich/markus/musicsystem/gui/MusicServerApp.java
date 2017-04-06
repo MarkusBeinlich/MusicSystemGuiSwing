@@ -57,11 +57,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
 
         /* Create and display the form */
         this.setVisible(true);
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                this.setVisible(true);
-//            }
-//        });
+
     }
 
     /**
@@ -571,22 +567,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
                     //Achtung - hier muss noch die passende MusicColleciton geladen werden.
                     //Das ist keine tolle Lösung mir fällt nichts besseres ein.
                     //Ich will vermeiden, das die MusicCollection an der MusicPlayer hängt.
-                    switch (musicSystem.getActivePlayer().getClass().getSimpleName()) {
-                        case "CdPlayer":
-                            rcm.replaceRecordCollection(CdCollection.getInstance());
-                            break;
-                        case "Mp3Player":
-                            rcm.replaceRecordCollection(Mp3Collection.getInstance());
-                            break;
-                        case "RecordPlayer":
-                            rcm.replaceRecordCollection(RecordCollection.getInstance());
-                            break;
-                        case "Radio":
-                            rcm.replaceRecordCollection(RadioStationCollection.getInstance());
-                            break;
-                        default:
-                            System.err.println("Unbekannte Klasse der ActiveSource: " + musicSystem.getClass().getSimpleName());
-                    }
+                    rcm.replaceRecordCollection(MusicCollection.getInstance(musicSystem.getActivePlayer().getClass().getSimpleName()));
                     //Selektierten Record auf ersten Wert der Liste setzen
                     //Das darf erst erfolgen, wenn die neue RecordCollection gesetzt ist.
                     comboBoxRecords.setSelectedIndex(0);

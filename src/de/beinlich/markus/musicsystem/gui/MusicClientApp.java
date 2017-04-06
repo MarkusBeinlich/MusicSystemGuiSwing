@@ -27,22 +27,11 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
     private MusicCollectionInterface musicCollection;
     private MusicSystemControllerInterface musicSystemController;
     private final MusicClient mc;
-//    private RecordCollection rc;
-//    private RecordCollection cdc;
     private final TrackListModel tlm;
     private final RecordComboBoxModel rcm;
     private final SourceComboBoxModel scm;
     private final ServerComboBoxModel sercm;
     private static String clientName;
-//    private Record record;
-//    private ServerPool serverPool;
-//    private MusicPlayer musicPlayer;
-//    private MusicCollection musicCollection;
-//    private PlayListComponent playListComponent;
-//    private MusicSystemState musicState;
-//    private double volume;
-//    private double oldVolume;
-//    private ClientInit clientInit;
 
     /**
      * Creates new form Player

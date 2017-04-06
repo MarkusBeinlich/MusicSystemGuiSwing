@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package de.beinlich.markus.musicsystem.model.net;
+package de.beinlich.markus.musicsystem.gui;
 
-import de.beinlich.markus.musicsystem.gui.MusicServerApp;
-import de.beinlich.markus.musicsystem.model.net.MusicSystemControllerInterface;
+//import de.beinlich.markus.musicsystem.gui.MusicServerApp;
 import de.beinlich.markus.musicsystem.model.*;
+import de.beinlich.markus.musicsystem.model.net.MusicSystemControllerInterface;
 import java.util.logging.*;
 
 /**

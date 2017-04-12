@@ -94,7 +94,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
         comboBoxRecords = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle(musicSystem.getName() + " - " + musicSystem.getLocation());
+        setTitle(musicSystem.getMusicSystemName() + " - " + musicSystem.getLocation());
 
         buttonPlay.setText("Play");
         buttonPlay.addActionListener(new java.awt.event.ActionListener() {
@@ -352,7 +352,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
     }//GEN-LAST:event_sliderVolumeStateChanged
 
     private void listCurrentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listCurrentRecordMouseClicked
-        musicSystemController.setCurrentTrack(listCurrentRecord.getSelectedValue());
+        musicSystemController.setCurrentTrack((PlayListComponent)listCurrentRecord.getSelectedValue());
     }//GEN-LAST:event_listCurrentRecordMouseClicked
 
     private void rbS1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_rbS1ItemStateChanged
@@ -392,7 +392,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
     private javax.swing.JButton buttonPlay;
     private javax.swing.JButton buttonPrevious;
     private javax.swing.JButton buttonStop;
-    private javax.swing.JComboBox<Record> comboBoxRecords;
+    private javax.swing.JComboBox<RecordInterface> comboBoxRecords;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -402,7 +402,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
     private javax.swing.JLabel labelCurrentTrack;
     private javax.swing.JLabel labelElapsedTime;
     private javax.swing.JLabel labelRemainingTime;
-    private javax.swing.JList<PlayListComponent> listCurrentRecord;
+    private javax.swing.JList<PlayListComponentInterface> listCurrentRecord;
     private javax.swing.JRadioButton rbS1;
     private javax.swing.JRadioButton rbS2;
     private javax.swing.JRadioButton rbS3;
@@ -411,7 +411,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
     private javax.swing.JSlider sliderVolume;
     // End of variables declaration//GEN-END:variables
 
-    class TrackListModel extends DefaultListModel<PlayListComponent> {
+    class TrackListModel extends DefaultListModel<PlayListComponentInterface> {
 
         private Record record;
 
@@ -433,14 +433,13 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
         }
 
         @Override
-        public PlayListComponent getElementAt(int index) {
-//            System.out.println(System.currentTimeMillis() + "getElementAt" + index + record.getTracks().get(index));
+        public PlayListComponentInterface getElementAt(int index) {
             return record.getTracks().get(index);
         }
 
     }
 
-    class RecordComboBoxModel extends DefaultComboBoxModel<Record> {
+    class RecordComboBoxModel extends DefaultComboBoxModel<RecordInterface> {
 
         private MusicCollection rc;
 
@@ -459,7 +458,7 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
         }
 
         @Override
-        public Record getElementAt(int index) {
+        public RecordInterface getElementAt(int index) {
             return rc.getRecord(index);
         }
 
@@ -541,15 +540,15 @@ public class MusicServerApp extends javax.swing.JFrame implements VolumeObserver
     @Override
     public void updateMusicPlayer() {
         int i = 0;
-        MusicPlayer ms;
+        MusicPlayerInterface ms;
         JRadioButton rb;
         System.out.println(System.currentTimeMillis() + "UpdateMusicPlayer");
-        int anz = musicSystem.getSources().size();
+        int anz = musicSystem.getPlayers().size();
         for (Enumeration<AbstractButton> rbg = buttonGroupSource.getElements(); rbg.hasMoreElements();) {
             //        for (MusicPlayer ms : hifi.getSources().) {
             rb = (JRadioButton) rbg.nextElement();
             if (i < anz) {
-                ms = musicSystem.getSources().get(i);
+                ms = musicSystem.getPlayers().get(i);
                 rb.setVisible(true);
                 rb.setText(ms.getTitle());
                 //Werte der aktiven MusicPlayer anzeigen

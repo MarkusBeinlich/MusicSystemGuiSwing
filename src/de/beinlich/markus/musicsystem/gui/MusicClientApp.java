@@ -62,7 +62,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
 //        record = musicSystem.getRecord();
         tlm = new TrackListModel(musicSystem.getRecord());
         rcm = new RecordComboBoxModel(mc.getMusicCollection());
-        scm = new SourceComboBoxModel((musicSystem.getSources()));
+        scm = new SourceComboBoxModel((musicSystem.getPlayers()));
         sercm = new ServerComboBoxModel(mc.getServerPool().getActiveServers());
 
         initComponents();
@@ -105,7 +105,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
         comboBoxServer = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle(musicSystem.getName() + " - " + musicSystem.getLocation() + " - " + clientName);
+        setTitle(musicSystem.getMusicSystemName() + " - " + musicSystem.getLocation() + " - " + clientName);
 
         buttonPlay.setText("Play");
         buttonPlay.addActionListener(new java.awt.event.ActionListener() {
@@ -169,7 +169,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
 
         jLabel5.setText("Record:");
 
-        jLabel1.setText("Source:");
+        jLabel1.setText("Player:");
 
         jPanelPicture.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -356,7 +356,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
 
     private void listCurrentRecordMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listCurrentRecordMouseClicked
         System.out.println(System.currentTimeMillis() + "listCurrentRecordMouseClicked" + listCurrentRecord.getSelectedValue());
-        musicSystemController.setCurrentTrack(listCurrentRecord.getSelectedValue());
+        musicSystemController.setCurrentTrack((PlayListComponent)listCurrentRecord.getSelectedValue());
     }//GEN-LAST:event_listCurrentRecordMouseClicked
 
     private void comboBoxRecordsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_comboBoxRecordsItemStateChanged
@@ -372,7 +372,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
         //das Verändern des musicSystem/MusicSystem-Objektes muss vom Model/Server aus erfolgen. Sonst gibt es Rückkoppelungen
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             System.out.println("musicPlayerSelected: " + comboBoxSource.getSelectedItem());
-            musicSystemController.setActiveSource(((MusicPlayer) comboBoxSource.getSelectedItem()).getTitle());
+            musicSystemController.setActiveSource(((MusicPlayerInterface) comboBoxSource.getSelectedItem()).getTitle());
         }
 
     }//GEN-LAST:event_comboBoxSourceItemStateChanged
@@ -417,9 +417,9 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
     private javax.swing.JButton buttonPlay;
     private javax.swing.JButton buttonPrevious;
     private javax.swing.JButton buttonStop;
-    private javax.swing.JComboBox<Record> comboBoxRecords;
+    private javax.swing.JComboBox<RecordDto> comboBoxRecords;
     private javax.swing.JComboBox<String> comboBoxServer;
-    private javax.swing.JComboBox<MusicPlayer> comboBoxSource;
+    private javax.swing.JComboBox<MusicPlayerInterface> comboBoxSource;
     private javax.swing.JLabel jCover;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -432,46 +432,46 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
     private javax.swing.JLabel labelCurrentTrack;
     private javax.swing.JLabel labelElapsedTime;
     private javax.swing.JLabel labelRemainingTime;
-    private javax.swing.JList<PlayListComponent> listCurrentRecord;
+    private javax.swing.JList<PlayListComponentInterface> listCurrentRecord;
     private javax.swing.JSlider sliderProgress;
     private javax.swing.JSlider sliderVolume;
     // End of variables declaration//GEN-END:variables
 
-    class RecordComboBoxModel extends DefaultComboBoxModel<Record> {
+    class RecordComboBoxModel extends DefaultComboBoxModel<RecordDto> {
 
-        private MusicCollection rc;
+        private MusicCollectionDto rc;
 
-        public RecordComboBoxModel(MusicCollection rc) {
+        public RecordComboBoxModel(MusicCollectionDto rc) {
             this.rc = rc;
-            this.setSelectedItem(rc.getRecord(0));
+            this.setSelectedItem(rc.records.get(0));
         }
 
-        public void replaceRecordCollection(MusicCollection rc) {
+        public void replaceRecordCollection(MusicCollectionDto rc) {
             this.rc = rc;
         }
 
         @Override
         public int getSize() {
-            return rc.getRecords().size();
+            return rc.records.size();
         }
 
         @Override
-        public Record getElementAt(int index) {
-            return rc.getRecord(index);
+        public RecordDto getElementAt(int index) {
+            return rc.records.get(index);
         }
 
     }
 
-    class SourceComboBoxModel extends DefaultComboBoxModel<MusicPlayer> {
+    class SourceComboBoxModel extends DefaultComboBoxModel<MusicPlayerInterface> {
 
-        private LinkedList<MusicPlayer> sources;
+        private List<MusicPlayerInterface> sources;
 
-        public SourceComboBoxModel(LinkedList<MusicPlayer> sources) {
+        public SourceComboBoxModel(List<MusicPlayerInterface> sources) {
             this.sources = sources;
-            this.setSelectedItem(sources.getFirst());
+            this.setSelectedItem(sources.get(0));
         }
 
-        public void replaceSources(LinkedList<MusicPlayer> sources) {
+        public void replaceSources(List<MusicPlayerInterface> sources) {
             this.sources = sources;
         }
 
@@ -481,7 +481,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
         }
 
         @Override
-        public MusicPlayer getElementAt(int index) {
+        public MusicPlayerInterface getElementAt(int index) {
             return sources.get(index);
         }
 
@@ -512,16 +512,16 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
 
     }
 
-    class TrackListModel extends DefaultListModel<PlayListComponent> {
+    class TrackListModel extends DefaultListModel<PlayListComponentInterface> {
 
-        private Record record;
+        private RecordInterface record;
 
-        public TrackListModel(Record record) {
+        public TrackListModel(RecordInterface record) {
 //            addListDataListener(this);
             this.record = record;
         }
 
-        public void replaceRecord(Record record) {
+        public void replaceRecord(RecordInterface record) {
 
             this.record = record;
             System.out.println("replaceRecord: " + getSize());
@@ -534,7 +534,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
         }
 
         @Override
-        public PlayListComponent getElementAt(int index) {
+        public PlayListComponentInterface getElementAt(int index) {
 //            System.out.println(System.currentTimeMillis() + "getElementAt" + index + record.getTracks().get(index));
             return record.getTracks().get(index);
         }
@@ -603,8 +603,8 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
         updatePlayListComponent();
         updateTrackTime();
         updateVolume();
-        scm.replaceSources(musicSystem.getSources());
-        setTitle(musicSystem.getName() + " - " + musicSystem.getLocation() + " - " + clientName);
+        scm.replaceSources(musicSystem.getPlayers());
+        setTitle(musicSystem.getMusicSystemName() + " - " + musicSystem.getLocation() + " - " + clientName);
     }
 
     /**

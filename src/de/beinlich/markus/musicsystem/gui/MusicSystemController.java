@@ -55,21 +55,30 @@ public class MusicSystemController implements MusicSystemControllerInterface {
     }
 
     @Override
-    public void setCurrentTrack(PlayListComponent track) {
-        musicSystem.setCurrentTrack(track);
+    public void setCurrentTrack(PlayListComponentInterface track) {
+        musicSystem.setCurrentTrack((PlayListComponent)track);
     }
 
     @Override
     public void setActiveSource(String selectedSource) {
         try {
             musicSystem.setActiveSource(musicSystem.getSource(selectedSource));
+            MusicCollectionInterface musicCollection = MusicCollection.getInstance(musicSystem.getActivePlayer().getClass().getSimpleName());
+            musicSystem.setRecord((Record)musicCollection.getRecord(0));
         } catch (IllegaleSourceException ex) {
             Logger.getLogger(MusicServerApp.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
-    public void setRecord(Record record) {
-        musicSystem.setRecord(record);
+    public void setRecord(RecordInterface record) {
+        MusicCollectionInterface musicCollection = MusicCollection.getInstance(musicSystem.getActivePlayer().getClass().getSimpleName());
+        if (record instanceof Record){
+        musicSystem.setRecord((Record)record);
+        } else if (record instanceof RecordDto){
+            musicSystem.setRecord((Record)musicCollection.getRecordById(((RecordDto) record).rid));
+        } else {
+            throw new ClassCastException(record.getClass().getName());
+        }
     }
 }

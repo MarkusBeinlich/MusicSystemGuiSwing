@@ -5,13 +5,10 @@
  */
 package de.beinlich.markus.musicsystem.gui;
 
-import de.beinlich.markus.musicsystem.model.net.MusicSystemControllerInterface;
+import de.beinlich.markus.musicsystem.model.net.*;
 import de.beinlich.markus.musicsystem.model.*;
-import de.beinlich.markus.musicsystem.model.net.MusicServer;
 import java.awt.event.*;
 import java.util.Enumeration;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 
 /**

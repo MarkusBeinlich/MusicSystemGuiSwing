@@ -363,7 +363,7 @@ public class MusicClientApp extends javax.swing.JFrame implements VolumeObserver
         //das Verändern des musicSystem/MusicSystem-Objektes muss vom Model/Server aus erfolgen. Sonst gibt es Rückkoppelungen
         if (evt.getStateChange() == ItemEvent.SELECTED) {
             System.out.println(System.currentTimeMillis() + "comboBoxRecordsItemStateChanged: " + listCurrentRecord.getSelectedValue());
-            musicSystemController.setRecord((Record) comboBoxRecords.getSelectedItem());
+            musicSystemController.setRecord((RecordInterface) comboBoxRecords.getSelectedItem());
         }
 
     }//GEN-LAST:event_comboBoxRecordsItemStateChanged
